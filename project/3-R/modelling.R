@@ -1,6 +1,8 @@
 
 library(h2o)
 library(readr)
+library(tidyverse)
+
 h2o.init(max_mem_size = "6g")
 
 df <- h2o.importFile("C:/Users/oskaras.valentinavic/Desktop/SMD S01E01/SMD S01E01/P160M132 Fuck/Project/KTU-DVDA-PROJECT/project/1-data/train_data.csv")
@@ -33,7 +35,29 @@ drf_model <- h2o.randomForest(x = x,
                              binomial_double_trees = TRUE,
                              training_frame = train,
                              validation_frame = valid)
-drf_model
 
-h2o.performance(drf_model, valid)
+perf <- h2o.performance(drf_model, train = TRUE)
+perf
+perf_valid <- h2o.performance(drf_model, valid = TRUE)
+perf_valid
+perf_test <- h2o.performance(drf_model, newdata = test)
+perf_test
 
+h2o.auc(perf)
+plot(perf_valid, type = "roc")
+
+
+predictions <- h2o.predict(drf_model, test_data)
+
+predictions %>%
+  as_tibble() %>%
+  mutate(id = row_number(), y = p0) %>%
+  select(id, y) %>%
+  write_csv("C:/Users/oskaras.valentinavic/Desktop/SMD S01E01/SMD S01E01/P160M132 Fuck/Project/KTU-DVDA-PROJECT/project/5-predictions/predictions1.csv")
+
+### ID, Y
+
+h2o.saveModel(drf_model, "C:/Users/oskaras.valentinavic/Desktop/SMD S01E01/SMD S01E01/P160M132 Fuck/Project/KTU-DVDA-PROJECT/project/4-model/", filename = "my_model")
+
+drf_model <- h2o.loadModel("C:/Users/oskaras.valentinavic/Desktop/SMD S01E01/SMD S01E01/P160M132 Fuck/Project/KTU-DVDA-PROJECT/project/4-model/my_model")
+h2o.varimp_plot(drf_model)
