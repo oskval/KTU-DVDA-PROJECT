@@ -42,3 +42,4 @@ vignettes/*.pdf
 
 project/1-data/*.csv     
 practice/*.csv
+project/4-model/*
