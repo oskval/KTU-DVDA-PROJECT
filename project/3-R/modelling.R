@@ -53,11 +53,11 @@ predictions %>%
   as_tibble() %>%
   mutate(id = row_number(), y = p0) %>%
   select(id, y) %>%
-  write_csv("C:/Users/oskaras.valentinavic/Desktop/SMD S01E01/SMD S01E01/P160M132 Fuck/Project/KTU-DVDA-PROJECT/project/5-predictions/predictions1.csv")
+  write_csv("../5-predictions/predictions1.csv")
 
 ### ID, Y
 
-h2o.saveModel(drf_model, "C:/Users/oskaras.valentinavic/Desktop/SMD S01E01/SMD S01E01/P160M132 Fuck/Project/KTU-DVDA-PROJECT/project/4-model/", filename = "my_model")
+h2o.saveModel(drf_model, "../4-model/", filename = "my_model")
 
-drf_model <- h2o.loadModel("C:/Users/oskaras.valentinavic/Desktop/SMD S01E01/SMD S01E01/P160M132 Fuck/Project/KTU-DVDA-PROJECT/project/4-model/my_model")
+drf_model <- h2o.loadModel("../4-model/my_model")
 h2o.varimp_plot(drf_model)
